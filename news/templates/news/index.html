@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Vietnamese News Summarization</title>
+        {% load static %}
+        <!-- CSS -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,500,500i">
+        <link rel="stylesheet" href="{% static 'news/assets/bootstrap/css/bootstrap.min.css' %}">
+        <link rel="stylesheet" href="{% static 'news/assets/font-awesome/css/font-awesome.min.css' %}">
+        <link rel="stylesheet" href="{% static 'news/assets/css/animate.css' %}">
+        <link rel="stylesheet" href="{% static 'news/assets/css/style.css' %}">
+
+        <!-- Favicon and touch icons -->
+        <link rel="shortcut icon" href="{% static 'news/assets/ico/favicon.png' %}">
+        <link rel="shortcut icon" href="{% static 'news/assets/ico/apple-touch-icon-144-precomposed.png' %}">
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="{% static 'news/assets/ico/apple-touch-icon-114-precomposed.png' %}">
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="{% static 'news/assets/ico/apple-touch-icon-72-precomposed.png' %}">
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="{% static 'news/assets/ico/apple-touch-icon-57-precomposed.png' %}">
+    </head>
+    <body>
+        <!-- Top menu -->
+        <nav class="navbar navbar-inverse navbar-fixed-top navbar-no-bg" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#top-navbar-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="index.html">Vietnamese News Summarization</a>
+                </div>
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="top-navbar-1">
+                    <ul class="nav navbar-nav navbar-right navbar-search-button">
+                        <li><a class="search-button" href="#"><i class="fa fa-search"></i></a></li>
+                    </ul>
+                    <form class="navbar-form navbar-right navbar-search-form disabled wow fadeInLeft" role="form" action="" method="post">
+                        <div class="form-group">
+                            <input type="text" name="search" placeholder="Search..." class="search form-control">
+                        </div>
+                    </form>
+                    <ul class="nav navbar-nav navbar-right navbar-menu-items wow fadeIn">
+                        <li><a href="{% url 'news:index' %}">Home</a></li>
+                        <li><a href="#">Services</a></li>
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Mission</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Features -->
+        <div class="features-container section-container">
+            <div class="container">
+
+                <div class="row">
+                    <div class="col-sm-12 features section-description wow fadeIn">
+                        <h2>
+                            Paste the news url here
+                        </h2>
+                        <form action="{% url 'news:result'%}" method="post">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <input type="text" required="required" name="url" class="form-control" id="url" placeholder="News URL you want to summarization">
+                                <small id="urlHelp" class="form-text text-muted">Paste URL of news here to summarization</small>
+                            </div>
+                            <button type="submit" style="background:rebeccapurple;" class="btn btn-primary">Summarization</button>
+                        </form>
+                        <div class="divider-1 wow fadeInUp"><span></span></div>
+                    </div>
+                </div>
+
+                <div class="row hide">
+                    <div class="col-sm-6 features-box wow fadeInLeft">
+                        <div class="row">
+                            <div class="col-sm-3 features-box-icon">
+                                <i class="fa fa-cloud"></i>
+                            </div>
+                            <div class="col-sm-9">
+                                <h3>ut wisi enim ad minim</h3>
+                                <p>
+                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et.
+                                    Ut wisi enim ad minim veniam, quis nostrud.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 features-box wow fadeInLeft">
+                        <div class="row">
+                            <div class="col-sm-3 features-box-icon">
+                                <i class="fa fa-instagram"></i>
+                            </div>
+                            <div class="col-sm-9">
+                                <h3>sed do eiusmod tempor</h3>
+                                <p>
+                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et.
+                                    Ut wisi enim ad minim veniam, quis nostrud.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row hide">
+                    <div class="col-sm-6 features-box wow fadeInLeft">
+                        <div class="row">
+                            <div class="col-sm-3 features-box-icon">
+                                <i class="fa fa-paperclip"></i>
+                            </div>
+                            <div class="col-sm-9">
+                                <h3>quis nostrud exerci tat</h3>
+                                <p>
+                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et.
+                                    Ut wisi enim ad minim veniam, quis nostrud.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 features-box wow fadeInLeft">
+                        <div class="row">
+                            <div class="col-sm-3 features-box-icon">
+                                <i class="fa fa-twitter"></i>
+                            </div>
+                            <div class="col-sm-9">
+                                <h3>minim veniam quis nostrud</h3>
+                                <p>
+                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et.
+                                    Ut wisi enim ad minim veniam, quis nostrud.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12 footer-copyright">
+                        &copy; Vietnamese News Summarization by <a href="#">Pham Van Toan</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+        <!-- Javascript -->
+        <script src="{% static 'news/assets/js/jquery-1.11.1.min.js' %}"></script>
+        <script src="{% static 'news/assets/bootstrap/js/bootstrap.min.js' %}"></script>
+        <script src="{% static 'news/assets/js/jquery.backstretch.min.js' %}"></script>
+        <script src="{% static 'news/assets/js/wow.min.js' %}"></script>
+        <script src="{% static 'news/assets/js/waypoints.min.js' %}"></script>
+        <script src="{% static 'news/assets/js/scripts.js' %}"></script>
+
+        <!--[if lt IE 10]>
+            <script src="assets/js/placeholder.js"></script>
+        <![endif]-->
+    </body>
+</html>
