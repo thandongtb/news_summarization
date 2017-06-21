@@ -5,6 +5,7 @@ from pyvi.pyvi import ViTokenizer
 from newspaper import Article
 from collections import Counter
 import tinysegmenter
+import newspaper
 
 import settings
 
@@ -42,8 +43,8 @@ def summarize(title='', text='', max_sents=5):
     summaries = []
     sentences = split_sentences(text)
 
-    if len(sentences)*0.6 > max_sents:
-        max_sents = int(len(sentences)*0.6)
+    if len(sentences)*0.4 > max_sents:
+        max_sents = int(len(sentences)*0.4)
     keys = keywords(text)
     titleWords = split_words(title)
 
@@ -110,7 +111,7 @@ def split_words(text):
     """
     try:
         # text = re.sub(r'[^\w ]', '', text)  # strip special chars
-        return [x.strip('0123456789%@$.,=+-!;/()*"&^:#|\n\t\s').lower() for x in text.split()]
+        return [x.strip('0123456789%@$.,=+-!;/()*"&^:#|\n\t').lower() for x in text.split()]
     except TypeError:
         return None
 
@@ -203,22 +204,22 @@ def different_sentence_position(i, size):
         return 0
 
 if __name__ == "__main__":
-    url = 'http://dantri.com.vn/the-gioi/bi-ban-chet-ke-danh-bom-khung-bo-tai-ga-tau-o-thu-do-brussels-20170621072926161.htm'
+    url = 'http://www.nikkei.com/article/DGXLASDC21H0E_R20C17A6EAF000/'
     # japanese_sentences = "私の名前は中野です"
     #
     # print japanese_tokenizer(japanese_sentences.decode('utf-8'))
     # set_stopwords('ja')
     # print stopwords
 
-    article = Article(url.decode('utf-8'))
-    article.download()
-    article.parse()
-
-    title = article.title
-    print title
-    print '-------------------'
-    content = article.text
-
+    # article = Article(url.decode('utf-8'))
+    # article.download()
+    # article.parse()
+    #
+    # title = article.title
+    # print title
+    # print '-------------------'
+    # content = article.text
+    # print content
     # title_segmentation = tokenizer_content(content=title)
     # # print title_segmentation
     # segmentation = tokenizer_content(content=content)
