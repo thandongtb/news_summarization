@@ -6,11 +6,17 @@ from newspaper import Article
 from collections import Counter
 import tinysegmenter
 import newspaper
-
+import json
+from google import google
 import settings
 
 with open(settings.NLP_STOPWORDS_VI, 'r') as f:
     stopwords = set([w.strip().replace(' ', '_') for w in f.readlines()])
+
+with open(settings.NLP_JOBWORDS, 'r') as f:
+    jobwords = set([w.strip().replace(' ', '_') for w in f.readlines()])
+
+jobwords = [x.lower() for x in jobwords]
 
 ideal = 20.0
 
@@ -43,8 +49,18 @@ def summarize(title='', text='', max_sents=5):
     summaries = []
     sentences = split_sentences(text)
 
-    if len(sentences)*0.4 > max_sents:
-        max_sents = int(len(sentences)*0.4)
+    if len(sentences) < 20:
+        if len(sentences) * 0.4 > max_sents:
+            max_sents = int(len(sentences) * 0.4)
+    elif len(sentences) < 30:
+        if len(sentences) * 0.35 > max_sents:
+            max_sents = int(len(sentences) * 0.35)
+    elif len(sentences) < 40:
+        if len(sentences) * 0.3 > max_sents:
+            max_sents = int(len(sentences) * 0.3)
+    else:
+        if len(sentences) * 0.3 > max_sents:
+            max_sents = int(len(sentences) * 0.3)
     keys = keywords(text)
     titleWords = split_words(title)
 
@@ -63,11 +79,14 @@ def score(sentences, titleWords, keywords):
     for i, s in enumerate(sentences):
         sentence = split_words(s)
         titleFeature = title_score(titleWords, sentence)
+
         sentenceLength = length_score(len(sentence))
+
         sentencePosition = different_sentence_position(i + 1, senSize)
-        summation_based_selectionFeature = summation_based_selection(sentence, keywords)
-        density_based_selectionFeature = density_based_selection(sentence, keywords)
-        frequency = (summation_based_selectionFeature + density_based_selectionFeature) / 2.0 * 10.0
+
+        summationBasedSelectionFeature = summation_based_selection(sentence, keywords)
+        densityBasedSelectionFeature = density_based_selection(sentence, keywords)
+        frequency = (summationBasedSelectionFeature + densityBasedSelectionFeature) / 2.0 * 10.0
         # Weighted average of scores from four categories
         totalScore = (titleFeature*0.5 + frequency*2.0 +
                       sentenceLength*0.5 + sentencePosition*1.0)/4.0
@@ -115,6 +134,11 @@ def split_words(text):
     except TypeError:
         return None
 
+def split_jobwords(text):
+    try:
+        return [x.strip('\n\t').lower() for x in text.split()]
+    except TypeError:
+        return None
 
 def keywords(text):
     """Get the top 10 keywords and remove stop words
@@ -203,30 +227,60 @@ def different_sentence_position(i, size):
     else:
         return 0
 
-if __name__ == "__main__":
-    url = 'http://www.nikkei.com/article/DGXLASDC21H0E_R20C17A6EAF000/'
-    # japanese_sentences = "私の名前は中野です"
-    #
-    # print japanese_tokenizer(japanese_sentences.decode('utf-8'))
-    # set_stopwords('ja')
-    # print stopwords
+def get_simhash_features(str):
+    return None
 
-    # article = Article(url.decode('utf-8'))
-    # article.download()
-    # article.parse()
+if __name__ == "__main__":
+    # sentences = "Bảo lãnh bằng chứng khoán"
+    # sentences = "The Job - Thiết kế kiến trúc và lập trình phát triển module/sản phẩm mới hoạt động ổn định. - Tối ưu hệ thống xử lý đáp ứng được hàng trăm nghìn giao dịch lớn đồng thời. - Nghiên cứu và ứng dụng các công nghệ mới vào đào tạo trực tuyến (3D, Vitual Class Room, Hangout, Oculus, Hologen, Emotive, Robostics,...) - Áp dụng CI/CD để deploy code lên server test, production hàng ngày. Your Skills and Experience - Độ tuổi từ 22 - 27 tuổi. - Tốt nghiệp đại học trở lên. - Sử dụng thành thạo ít nhất 1 ngôn ngữ lập trình (PHP, .Net, NodeJS,...). - Tự học công nghệ mới nhanh. - Có sản phẩm tự phát triển (Ưu tiên sản phẩm đã đi vào vận hành và lượng truy cập lớn) là lợi thế - Đọc hiểu tài liệu tiếng anh chuyên ngành tốt. Why You'll Love Working Here - Trải nghiệm 3 dự án trọng điểm trong 12 tháng, với 5 sản phẩm tại 4 quốc gia - Được đào tạo và ứng dụng các AI, Adaptive Learning, IOT nâng cao hiệu quả học tập cho sinh viên, tăng tính tương tác thực tiễn cho hoạt động giảng dạy. - Được làm việc cùng các chuyên gia công nghệ hàng đầu trong lĩnh vực Edtech. - Được dành riêng 2 ngày Innovative Free Day mỗi tháng, làm Machine Learning, VR, Hololens, Kinect... - Được đánh giá tăng lương, lên bậc 2 lần/năm. Nhiều cơ hội tăng lương 50-80%/ năm - Được làm việc trong môi trường có văn hóa start up trẻ, năng động, thẳng thắn thúc đẩy sự sáng tạo và phát triển"
+    # # sentences = "Ba ba bốn bốn năm năm"
+    # segmentation = tokenizer_content(sentences.decode('utf-8'))
+    # # print sentences
+    # print segmentation
+    # text = split_jobwords(segmentation)
     #
-    # title = article.title
+    # skills = [x for x in text if x.encode('utf-8') in jobwords and x.encode('utf-8') not in stopwords]
+    # print '--------------JOBS WORDS--------------'
+    # for x in skills:
+    #     print x , '|'
+
+    url = 'http://dantri.com.vn/su-kien/bo-cong-an-xem-xet-thanh-tra-biet-phu-cua-giam-doc-cong-an-yen-bai-20170628111516514.htm'
+
+
+    article = Article(url.decode('utf-8'))
+    article.download()
+    article.parse()
+
+    title = article.title
     # print title
     # print '-------------------'
-    # content = article.text
+    content = article.text
     # print content
-    # title_segmentation = tokenizer_content(content=title)
-    # # print title_segmentation
-    # segmentation = tokenizer_content(content=content)
-    #
-    # nlp_keywords = keywords(segmentation)
+    title_segmentation = tokenizer_content(content=title)
+    # print title_segmentation
+    segmentation = tokenizer_content(content=content)
+
+    nlp_keywords = keywords(segmentation)
     # print nlp_keywords
-    #
-    # summary_sents = summarize(title=title_segmentation, text=segmentation, max_sents=7)
-    # summary = '\n'.join(summary_sents)
-    # summary = summary.replace('_', ' ')
+
+    summary_sents = summarize(title=title_segmentation, text=segmentation, max_sents=7)
+
+    summary = '\n'.join(summary_sents)
+    summary = summary.replace('_', ' ')
+    split_summary_sents = sentences = split_sentences(summary)
+    links = {}
+    for sen in split_summary_sents:
+        num_page = 1
+        search_results = google.search(sen, num_page)
+        for result in search_results:
+            if result.link in links:
+                links[result.link] += 1
+            else:
+                links[result.link] = 1
+
+    # Sort the links
+    links = sorted(links.items(),
+                  key=lambda x: (x[1], x[0]),
+                  reverse=True)
+    links = json.dumps(links)
+    print links

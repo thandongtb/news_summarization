@@ -21,6 +21,9 @@ NLP_STOPWORDS_EN = os.path.join(
 NLP_STOPWORDS_JA = os.path.join(
     PARENT_DIRECTORY, 'resources/misc/stopwords-nlp-ja.txt')
 
+NLP_JOBWORDS = os.path.join(
+    PARENT_DIRECTORY, 'resources/misc/all_linked_skills.txt')
+
 DATA_DIRECTORY = '.newspaper_scraper'
 
 TOP_DIRECTORY = os.path.join(os.path.expanduser("~"), DATA_DIRECTORY)
